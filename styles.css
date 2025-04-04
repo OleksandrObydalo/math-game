@@ -1,0 +1,213 @@
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Fredoka', sans-serif;
+    background-color: #f5f7ff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    color: #333;
+}
+
+.game-container {
+    background-color: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 600px;
+    padding: 30px;
+    text-align: center;
+}
+
+h1 {
+    color: #4b7bec;
+    margin-bottom: 25px;
+    font-size: 2.2rem;
+}
+
+/* Settings Section */
+.settings {
+    background-color: #f1f5fe;
+    padding: 20px;
+    border-radius: 15px;
+    margin-bottom: 20px;
+}
+
+.operation-selection {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.operation-selection label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.difficulty-selection {
+    margin-bottom: 20px;
+}
+
+.difficulty-selection select {
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid #ccd;
+    font-family: inherit;
+    font-size: 0.9rem;
+}
+
+button {
+    background-color: #4b7bec;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 10px;
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #3867d6;
+}
+
+/* Game Area */
+.game-area {
+    margin-top: 20px;
+}
+
+.score-timer {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.score {
+    color: #20bf6b;
+}
+
+.timer {
+    color: #eb3b5a;
+}
+
+.problem-container {
+    margin-bottom: 25px;
+}
+
+.problem {
+    font-size: 2.5rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: #4b6584;
+}
+
+#answer-input {
+    padding: 12px 15px;
+    font-size: 1.5rem;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    width: 120px;
+    text-align: center;
+    margin-right: 10px;
+    font-family: inherit;
+}
+
+#answer-input:focus {
+    outline: none;
+    border-color: #4b7bec;
+}
+
+.result-feedback {
+    font-size: 1.2rem;
+    font-weight: 600;
+    height: 30px;
+    margin-top: 15px;
+}
+
+.correct {
+    color: #20bf6b;
+}
+
+.wrong {
+    color: #eb3b5a;
+}
+
+/* Results Section */
+.results {
+    background-color: #f1f5fe;
+    padding: 25px;
+    border-radius: 15px;
+}
+
+.results h2 {
+    color: #4b7bec;
+    margin-bottom: 20px;
+}
+
+.final-score {
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: #20bf6b;
+}
+
+.stats {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 25px;
+    font-size: 1.1rem;
+}
+
+#correct-answers {
+    color: #20bf6b;
+    font-weight: 600;
+}
+
+#wrong-answers {
+    color: #eb3b5a;
+    font-weight: 600;
+}
+
+#play-again-button {
+    background-color: #20bf6b;
+}
+
+#play-again-button:hover {
+    background-color: #0da553;
+}
+
+@media (max-width: 480px) {
+    .game-container {
+        padding: 20px 15px;
+    }
+    
+    h1 {
+        font-size: 1.8rem;
+    }
+    
+    .problem {
+        font-size: 2rem;
+    }
+    
+    .operation-selection {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
