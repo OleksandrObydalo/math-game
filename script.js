@@ -134,9 +134,30 @@ function generateProblem() {
             num1 = num2 * answer;
             operator = '÷';
             break;
+        case 'square':
+            // Square operation (x²)
+            num1 = Math.floor(Math.random() * Math.min(12, maxNumber)) + 1;
+            num2 = null; // No second number needed
+            answer = num1 * num1;
+            operator = '²';
+            break;
+        case 'squareRoot':
+            // Square root operation (√)
+            answer = Math.floor(Math.random() * Math.min(10, maxNumber)) + 1;
+            num1 = answer * answer; // Perfect square
+            num2 = null; // No second number needed
+            operator = '√';
+            break;
     }
     
-    problem = `${num1} ${operator} ${num2} = ?`;
+    // Format the problem display based on operation type
+    if (operationType === 'square') {
+        problem = `${num1}${operator} = ?`;
+    } else if (operationType === 'squareRoot') {
+        problem = `${operator}${num1} = ?`;
+    } else {
+        problem = `${num1} ${operator} ${num2} = ?`;
+    }
     
     // Update UI
     problemElement.textContent = problem;
@@ -222,4 +243,3 @@ function resetGame() {
     resultsSection.style.display = 'none';
     settingsSection.style.display = 'block';
 }
-
