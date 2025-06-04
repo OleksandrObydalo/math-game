@@ -231,6 +231,42 @@ button:hover {
     background-color: #0da553;
 }
 
+/* Problem History Styles */
+.problem-history-container {
+    margin-top: 20px;
+    background-color: #f8faff;
+    border-radius: 10px;
+    padding: 15px;
+}
+
+.problem-history-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.problem-history-table th {
+    background-color: #4b7bec;
+    color: white;
+    padding: 10px;
+    text-align: left;
+    font-size: 0.9rem;
+}
+
+.problem-history-table td {
+    padding: 10px;
+    border-bottom: 1px solid #e8f0fe;
+    font-size: 0.9rem;
+}
+
+.problem-history-table .correct-row {
+    background-color: #e6f3e6;
+}
+
+.problem-history-table .wrong-row {
+    background-color: #f3e6e6;
+}
+
 @media (max-width: 480px) {
     .game-container {
         padding: 20px 15px;

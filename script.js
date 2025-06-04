@@ -15,6 +15,9 @@ let gameRecords = JSON.parse(localStorage.getItem('mathGameRecords')) || {
 };
 let currentDifficulty = 'medium';
 
+// Add a new array to track problems
+let problemHistory = [];
+
 // DOM elements
 const startButton = document.getElementById('start-button');
 const submitButton = document.getElementById('submit-button');
@@ -196,6 +199,17 @@ function checkAnswer() {
         return;
     }
     
+    // Create problem result object
+    const problemResult = {
+        problem: problemElement.textContent,
+        userAnswer: userAnswer,
+        correctAnswer: currentProblem.answer,
+        isCorrect: userAnswer === currentProblem.answer
+    };
+    
+    // Store problem in history
+    problemHistory.push(problemResult);
+    
     if (userAnswer === currentProblem.answer) {
         // Correct answer
         score += 10;
@@ -257,12 +271,66 @@ function endGame() {
     // Update stats display
     updateStatsDisplay();
     
+    // Create problem history display
+    const problemHistoryContainer = createProblemHistoryDisplay();
+    resultsSection.appendChild(problemHistoryContainer);
+    
     // Celebration confetti for game completion
     confetti({
         particleCount: 100,
         spread: 70,
         origin: { y: 0.6 }
     });
+}
+
+// Create problem history display
+function createProblemHistoryDisplay() {
+    const container = document.createElement('div');
+    container.className = 'problem-history-container';
+    
+    const title = document.createElement('h3');
+    title.textContent = 'Problem History';
+    container.appendChild(title);
+    
+    const table = document.createElement('table');
+    table.className = 'problem-history-table';
+    
+    // Create table header
+    const headerRow = document.createElement('tr');
+    ['Problem', 'Your Answer', 'Correct Answer', 'Result'].forEach(headerText => {
+        const th = document.createElement('th');
+        th.textContent = headerText;
+        headerRow.appendChild(th);
+    });
+    table.appendChild(headerRow);
+    
+    // Add problem rows
+    problemHistory.forEach(problem => {
+        const row = document.createElement('tr');
+        row.className = problem.isCorrect ? 'correct-row' : 'wrong-row';
+        
+        const problemCell = document.createElement('td');
+        problemCell.textContent = problem.problem;
+        
+        const userAnswerCell = document.createElement('td');
+        userAnswerCell.textContent = problem.userAnswer;
+        
+        const correctAnswerCell = document.createElement('td');
+        correctAnswerCell.textContent = problem.correctAnswer;
+        
+        const resultCell = document.createElement('td');
+        resultCell.textContent = problem.isCorrect ? '✓' : '✗';
+        
+        row.appendChild(problemCell);
+        row.appendChild(userAnswerCell);
+        row.appendChild(correctAnswerCell);
+        row.appendChild(resultCell);
+        
+        table.appendChild(row);
+    });
+    
+    container.appendChild(table);
+    return container;
 }
 
 // Update stats display
@@ -281,6 +349,15 @@ function updateStatsDisplay() {
 
 // Reset game
 function resetGame() {
+    // Reset problem history
+    problemHistory = [];
+    
+    // Remove existing problem history if it exists
+    const existingHistoryContainer = document.querySelector('.problem-history-container');
+    if (existingHistoryContainer) {
+        existingHistoryContainer.remove();
+    }
+    
     resultsSection.style.display = 'none';
     settingsSection.style.display = 'block';
 }
