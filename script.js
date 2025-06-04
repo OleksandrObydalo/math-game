@@ -8,6 +8,12 @@ let currentProblem = {};
 let correctAnswers = 0;
 let wrongAnswers = 0;
 let gameRunning = false;
+let gameRecords = JSON.parse(localStorage.getItem('mathGameRecords')) || {
+    easy: { highScore: 0, totalGames: 0, totalCorrect: 0, totalWrong: 0 },
+    medium: { highScore: 0, totalGames: 0, totalCorrect: 0, totalWrong: 0 },
+    hard: { highScore: 0, totalGames: 0, totalCorrect: 0, totalWrong: 0 }
+};
+let currentDifficulty = 'medium';
 
 // DOM elements
 const startButton = document.getElementById('start-button');
@@ -48,6 +54,10 @@ function startGame() {
         return;
     }
 
+    // Get current difficulty
+    const difficultySelect = document.getElementById('difficulty');
+    currentDifficulty = difficultySelect.value;
+    
     // Reset game variables
     score = 0;
     timer = 60;
@@ -191,7 +201,7 @@ function checkAnswer() {
         score += 10;
         correctAnswers++;
         scoreElement.textContent = score;
-        feedbackElement.textContent = 'Correct! 🎉';
+        feedbackElement.textContent = 'Correct! ';
         feedbackElement.className = 'result-feedback correct';
         
         // Small confetti for correct answer
@@ -221,6 +231,20 @@ function endGame() {
     gameRunning = false;
     clearInterval(timerInterval);
     
+    // Update stats for current difficulty
+    const stats = gameRecords[currentDifficulty];
+    stats.totalGames++;
+    stats.totalCorrect += correctAnswers;
+    stats.totalWrong += wrongAnswers;
+    
+    // Update high score if needed
+    if (score > stats.highScore) {
+        stats.highScore = score;
+    }
+    
+    // Save to local storage
+    localStorage.setItem('mathGameRecords', JSON.stringify(gameRecords));
+    
     // Update results section
     finalScoreElement.textContent = score;
     correctAnswersElement.textContent = correctAnswers;
@@ -230,12 +254,29 @@ function endGame() {
     gameArea.style.display = 'none';
     resultsSection.style.display = 'block';
     
+    // Update stats display
+    updateStatsDisplay();
+    
     // Celebration confetti for game completion
     confetti({
         particleCount: 100,
         spread: 70,
         origin: { y: 0.6 }
     });
+}
+
+// Update stats display
+function updateStatsDisplay() {
+    const stats = gameRecords[currentDifficulty];
+    document.getElementById('high-score').textContent = stats.highScore;
+    document.getElementById('total-games').textContent = stats.totalGames;
+    document.getElementById('total-correct').textContent = stats.totalCorrect;
+    document.getElementById('total-wrong').textContent = stats.totalWrong;
+    document.getElementById('accuracy').textContent = 
+        stats.totalCorrect + stats.totalWrong > 0 
+            ? Math.round((stats.totalCorrect / (stats.totalCorrect + stats.totalWrong)) * 100) + '%' 
+            : '0%';
+    document.getElementById('difficulty-label').textContent = currentDifficulty.charAt(0).toUpperCase() + currentDifficulty.slice(1);
 }
 
 // Reset game

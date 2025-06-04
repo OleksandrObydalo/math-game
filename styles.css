@@ -184,6 +184,45 @@ button:hover {
     font-weight: 600;
 }
 
+.statistics-container {
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 15px;
+    margin-bottom: 25px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+}
+
+.statistics-container h3 {
+    color: #4b6584;
+    margin-bottom: 15px;
+    font-size: 1.2rem;
+}
+
+.statistics {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
+
+.stat-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    background-color: #f8faff;
+    border-radius: 8px;
+}
+
+.stat-label {
+    font-size: 0.95rem;
+    color: #4b6584;
+}
+
+.stat-value {
+    font-weight: 600;
+    color: #4b7bec;
+}
+
 #play-again-button {
     background-color: #20bf6b;
 }
@@ -210,4 +249,3 @@ button:hover {
         align-items: flex-start;
     }
 }
-
