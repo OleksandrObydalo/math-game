@@ -93,6 +93,7 @@ button:hover {
 .score-timer {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     margin-bottom: 20px;
     font-size: 1.2rem;
     font-weight: 600;
@@ -265,6 +266,22 @@ button:hover {
 
 .problem-history-table .wrong-row {
     background-color: #f3e6e6;
+}
+
+.player-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+.total-points {
+    color: #a55eea;
+}
+
+.player-level {
+    color: #fd79a8;
+    font-size: 1rem;
 }
 
 @media (max-width: 480px) {

@@ -18,6 +18,10 @@ let currentDifficulty = 'medium';
 // Add a new array to track problems
 let problemHistory = [];
 
+// Add player progression variables
+let totalPoints = parseInt(localStorage.getItem('mathGameTotalPoints')) || 0;
+let playerLevel = Math.floor(totalPoints / 200) + 1;
+
 // DOM elements
 const startButton = document.getElementById('start-button');
 const submitButton = document.getElementById('submit-button');
@@ -30,6 +34,8 @@ const timerElement = document.getElementById('timer');
 const finalScoreElement = document.getElementById('final-score');
 const correctAnswersElement = document.getElementById('correct-answers');
 const wrongAnswersElement = document.getElementById('wrong-answers');
+const totalPointsElement = document.getElementById('total-points');
+const playerLevelElement = document.getElementById('player-level');
 
 // Game sections
 const settingsSection = document.querySelector('.settings');
@@ -71,6 +77,8 @@ function startGame() {
     // Update UI
     scoreElement.textContent = score;
     timerElement.textContent = timer;
+    totalPointsElement.textContent = totalPoints;
+    playerLevelElement.textContent = playerLevel;
     settingsSection.style.display = 'none';
     gameArea.style.display = 'block';
     resultsSection.style.display = 'none';
@@ -212,18 +220,43 @@ function checkAnswer() {
     
     if (userAnswer === currentProblem.answer) {
         // Correct answer
-        score += 10;
+        const pointsEarned = 10;
+        score += pointsEarned;
+        totalPoints += pointsEarned;
         correctAnswers++;
+        
+        // Check for level up
+        const newLevel = Math.floor(totalPoints / 200) + 1;
+        if (newLevel > playerLevel) {
+            playerLevel = newLevel;
+            feedbackElement.textContent = `Correct! Level Up! You are now Level ${playerLevel}! `;
+            
+            // Extra confetti for level up
+            confetti({
+                particleCount: 100,
+                spread: 70,
+                origin: { y: 0.6 }
+            });
+        } else {
+            feedbackElement.textContent = 'Correct! ';
+        }
+        
         scoreElement.textContent = score;
-        feedbackElement.textContent = 'Correct! ';
+        totalPointsElement.textContent = totalPoints;
+        playerLevelElement.textContent = playerLevel;
         feedbackElement.className = 'result-feedback correct';
         
+        // Save total points to localStorage
+        localStorage.setItem('mathGameTotalPoints', totalPoints.toString());
+        
         // Small confetti for correct answer
-        confetti({
-            particleCount: 50,
-            spread: 70,
-            origin: { y: 0.6 }
-        });
+        if (newLevel === playerLevel) {
+            confetti({
+                particleCount: 50,
+                spread: 70,
+                origin: { y: 0.6 }
+            });
+        }
     } else {
         // Wrong answer
         wrongAnswers++;
