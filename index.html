@@ -16,6 +16,21 @@
     <div class="game-container">
         <h1>Math Practice Game</h1>
         
+        <div class="persistent-stats">
+            <div class="stat-item">
+                <span class="stat-label">Total Points:</span>
+                <span class="stat-value" id="persistent-total-points">0</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Level:</span>
+                <span class="stat-value" id="persistent-player-level">1</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">High Score:</span>
+                <span class="stat-value" id="persistent-high-score">0</span>
+            </div>
+        </div>
+        
         <div class="settings">
             <div class="operation-selection">
                 <label><input type="checkbox" name="operation" value="addition" checked> Addition (+)</label>
@@ -47,6 +62,12 @@
                     <div class="player-level">Level: <span id="player-level">1</span></div>
                 </div>
                 <div class="timer">Time: <span id="timer">60</span>s</div>
+            </div>
+            
+            <div class="power-up-section">
+                <button id="time-boost-button" class="power-up-button">
+                    ⚡ +10 seconds (50 points)
+                </button>
             </div>
             
             <div class="problem-container">

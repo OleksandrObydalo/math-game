@@ -26,6 +26,7 @@ let playerLevel = Math.floor(totalPoints / 200) + 1;
 const startButton = document.getElementById('start-button');
 const submitButton = document.getElementById('submit-button');
 const playAgainButton = document.getElementById('play-again-button');
+const timeBoostButton = document.getElementById('time-boost-button');
 const answerInput = document.getElementById('answer-input');
 const problemElement = document.getElementById('problem');
 const feedbackElement = document.getElementById('feedback');
@@ -36,6 +37,9 @@ const correctAnswersElement = document.getElementById('correct-answers');
 const wrongAnswersElement = document.getElementById('wrong-answers');
 const totalPointsElement = document.getElementById('total-points');
 const playerLevelElement = document.getElementById('player-level');
+const persistentTotalPointsElement = document.getElementById('persistent-total-points');
+const persistentPlayerLevelElement = document.getElementById('persistent-player-level');
+const persistentHighScoreElement = document.getElementById('persistent-high-score');
 
 // Game sections
 const settingsSection = document.querySelector('.settings');
@@ -46,12 +50,28 @@ const resultsSection = document.querySelector('.results');
 startButton.addEventListener('click', startGame);
 submitButton.addEventListener('click', checkAnswer);
 playAgainButton.addEventListener('click', resetGame);
+timeBoostButton.addEventListener('click', useTimeBoost);
 
 // Enter key to submit answer
 answerInput.addEventListener('keyup', (e) => {
     if (e.key === 'Enter' && gameRunning) {
         checkAnswer();
     }
+});
+
+// Initialize persistent stats display
+function updatePersistentStats() {
+    persistentTotalPointsElement.textContent = totalPoints;
+    persistentPlayerLevelElement.textContent = playerLevel;
+    
+    // Get current difficulty high score
+    const currentHighScore = gameRecords[currentDifficulty].highScore;
+    persistentHighScoreElement.textContent = currentHighScore;
+}
+
+// Call this function when the page loads
+document.addEventListener('DOMContentLoaded', function() {
+    updatePersistentStats();
 });
 
 // Start the game
@@ -62,7 +82,7 @@ function startGame() {
         alert('Please select at least one operation');
         return;
     }
-
+    
     // Get current difficulty
     const difficultySelect = document.getElementById('difficulty');
     currentDifficulty = difficultySelect.value;
@@ -93,6 +113,13 @@ function startGame() {
     
     // Focus on answer input
     answerInput.focus();
+    
+    // Update persistent stats
+    updatePersistentStats();
+    
+    // Enable time boost button
+    timeBoostButton.disabled = false;
+    updateTimeBoostButton();
 }
 
 // Get selected operations
@@ -257,6 +284,10 @@ function checkAnswer() {
                 origin: { y: 0.6 }
             });
         }
+        
+        // Update persistent stats
+        updatePersistentStats();
+        updateTimeBoostButton();
     } else {
         // Wrong answer
         wrongAnswers++;
@@ -271,6 +302,48 @@ function checkAnswer() {
             feedbackElement.textContent = '';
         }
     }, 1500);
+}
+
+// Use time boost power-up
+function useTimeBoost() {
+    if (!gameRunning || totalPoints < 50) {
+        return;
+    }
+    
+    // Deduct points and add time
+    totalPoints -= 50;
+    timer += 10;
+    
+    // Update displays
+    totalPointsElement.textContent = totalPoints;
+    persistentTotalPointsElement.textContent = totalPoints;
+    timerElement.textContent = timer;
+    
+    // Save total points
+    localStorage.setItem('mathGameTotalPoints', totalPoints.toString());
+    
+    // Update button state
+    updateTimeBoostButton();
+    
+    // Show feedback
+    feedbackElement.textContent = '+10 seconds! ⚡';
+    feedbackElement.className = 'result-feedback correct';
+    setTimeout(() => {
+        if (gameRunning) {
+            feedbackElement.textContent = '';
+        }
+    }, 1000);
+}
+
+// Update time boost button state
+function updateTimeBoostButton() {
+    if (totalPoints >= 50) {
+        timeBoostButton.disabled = false;
+        timeBoostButton.textContent = '⚡ +10 seconds (50 points)';
+    } else {
+        timeBoostButton.disabled = true;
+        timeBoostButton.textContent = `⚡ Need ${50 - totalPoints} more points`;
+    }
 }
 
 // End the game
@@ -393,4 +466,7 @@ function resetGame() {
     
     resultsSection.style.display = 'none';
     settingsSection.style.display = 'block';
+    
+    // Update persistent stats
+    updatePersistentStats();
 }
