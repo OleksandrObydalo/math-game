@@ -74,6 +74,46 @@ document.addEventListener('DOMContentLoaded', function() {
     updatePersistentStats();
 });
 
+// Add pause-related variables
+let gamePaused = false;
+
+// Add pause button to HTML
+function addPauseButton() {
+    const pauseButton = document.createElement('button');
+    pauseButton.id = 'pause-button';
+    pauseButton.textContent = '⏸️ Pause';
+    pauseButton.addEventListener('click', togglePause);
+    
+    const scoreTimerSection = document.querySelector('.score-timer');
+    scoreTimerSection.appendChild(pauseButton);
+}
+
+// Toggle pause functionality
+function togglePause() {
+    const pauseButton = document.getElementById('pause-button');
+    const gameElements = [answerInput, submitButton];
+    
+    if (!gamePaused) {
+        // Pause the game
+        gamePaused = true;
+        clearInterval(timerInterval);
+        gameElements.forEach(el => el.disabled = true);
+        pauseButton.textContent = '▶️ Resume';
+        feedbackElement.textContent = 'Game Paused';
+        feedbackElement.className = 'result-feedback';
+    } else {
+        // Resume the game
+        gamePaused = false;
+        timerInterval = setInterval(updateTimer, 1000);
+        gameElements.forEach(el => el.disabled = false);
+        pauseButton.textContent = '⏸️ Pause';
+        feedbackElement.textContent = '';
+        
+        // Regenerate problem when resuming
+        generateProblem();
+    }
+}
+
 // Start the game
 function startGame() {
     // Get selected operations
@@ -120,6 +160,9 @@ function startGame() {
     // Enable time boost button
     timeBoostButton.disabled = false;
     updateTimeBoostButton();
+    
+    // Add pause button
+    addPauseButton();
 }
 
 // Get selected operations
@@ -157,43 +200,39 @@ function generateProblem() {
     
     switch (operationType) {
         case 'addition':
-            num1 = Math.floor(Math.random() * maxNumber) + 1;
-            num2 = Math.floor(Math.random() * maxNumber) + 1;
+            num1 = Math.floor(Math.random() * (maxNumber - 1)) + 2;
+            num2 = Math.floor(Math.random() * (maxNumber - 1)) + 2;
             answer = num1 + num2;
             operator = '+';
             break;
         case 'subtraction':
-            num1 = Math.floor(Math.random() * maxNumber) + 1;
-            num2 = Math.floor(Math.random() * num1) + 1; // Ensure positive result
+            num1 = Math.floor(Math.random() * (maxNumber - 1)) + 2;
+            num2 = Math.floor(Math.random() * (num1 - 1)) + 2; // Ensure positive result
             answer = num1 - num2;
             operator = '-';
             break;
         case 'multiplication':
-            // Adjust multiplication to be easier
-            num1 = Math.floor(Math.random() * Math.min(12, maxNumber)) + 1;
-            num2 = Math.floor(Math.random() * Math.min(12, maxNumber)) + 1;
+            num1 = Math.floor(Math.random() * Math.min(12, maxNumber - 1)) + 2;
+            num2 = Math.floor(Math.random() * Math.min(12, maxNumber - 1)) + 2;
             answer = num1 * num2;
             operator = '×';
             break;
         case 'division':
-            // Create division problems with whole number answers
-            num2 = Math.floor(Math.random() * Math.min(12, maxNumber)) + 1;
-            answer = Math.floor(Math.random() * Math.min(12, maxNumber)) + 1;
+            num2 = Math.floor(Math.random() * Math.min(12, maxNumber - 1)) + 2;
+            answer = Math.floor(Math.random() * Math.min(12, maxNumber - 1)) + 2;
             num1 = num2 * answer;
             operator = '÷';
             break;
         case 'square':
-            // Square operation (x²)
-            num1 = Math.floor(Math.random() * Math.min(12, maxNumber)) + 1;
-            num2 = null; // No second number needed
+            num1 = Math.floor(Math.random() * Math.min(12, maxNumber - 1)) + 2;
+            num2 = null;
             answer = num1 * num1;
             operator = '²';
             break;
         case 'squareRoot':
-            // Square root operation (√)
-            answer = Math.floor(Math.random() * Math.min(10, maxNumber)) + 1;
-            num1 = answer * answer; // Perfect square
-            num2 = null; // No second number needed
+            answer = Math.floor(Math.random() * Math.min(10, maxNumber - 1)) + 2;
+            num1 = answer * answer;
+            num2 = null;
             operator = '√';
             break;
     }
@@ -473,4 +512,13 @@ function resetGame() {
     
     // Update persistent stats
     updatePersistentStats();
+    
+    // Remove pause button
+    const pauseButton = document.getElementById('pause-button');
+    if (pauseButton) {
+        pauseButton.remove();
+    }
+    
+    // Reset pause state
+    gamePaused = false;
 }
