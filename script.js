@@ -247,7 +247,11 @@ function checkAnswer() {
     
     if (userAnswer === currentProblem.answer) {
         // Correct answer
-        const pointsEarned = 10;
+        const pointsEarned = {
+            'easy': 10,
+            'medium': 20,
+            'hard': 30
+        }[currentDifficulty];
         score += pointsEarned;
         totalPoints += pointsEarned;
         correctAnswers++;
@@ -256,7 +260,7 @@ function checkAnswer() {
         const newLevel = Math.floor(totalPoints / 200) + 1;
         if (newLevel > playerLevel) {
             playerLevel = newLevel;
-            feedbackElement.textContent = `Correct! Level Up! You are now Level ${playerLevel}! `;
+            feedbackElement.textContent = `Correct! +${pointsEarned} pts! Level Up! You are now Level ${playerLevel}! `;
             
             // Extra confetti for level up
             confetti({
@@ -265,7 +269,7 @@ function checkAnswer() {
                 origin: { y: 0.6 }
             });
         } else {
-            feedbackElement.textContent = 'Correct! ';
+            feedbackElement.textContent = `Correct! +${pointsEarned} points! `;
         }
         
         scoreElement.textContent = score;
